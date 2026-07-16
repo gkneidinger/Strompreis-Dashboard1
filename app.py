@@ -55,7 +55,6 @@ if raw_data:
     df['Datum'] = df['Startzeit'].dt.date
     df['Anzeigezeit'] = df['Startzeit'].dt.strftime('%d.%m. %H:%M')
     
-    
     # Börsenpreis von Eur/MWh in Cent/kWh
     df['Börsenpreis (netto cent/kWh)'] = (df['marketprice'] / 10).round(2)
     
@@ -92,17 +91,14 @@ if raw_data:
         
     st.markdown("---")
     
-    # --- CHART GENERIEREN (Bis morgen 14:00) ---
+    # --- CHART GENERIEREN (Als Balkendiagramm bis morgen 14:00) ---
     st.subheader("📊 Preisverlauf (Heute 00:00 bis Morgen 14:00)")
     
-    chart = alt.Chart(df_anzeige).mark_area(
-        line={'color':'#1f77b4'},
-        color=alt.Gradient(
-            gradient='linear',
-            stops=[alt.GradientStop(color='#1f77b4', offset=0),
-                   alt.GradientStop(color='transparent', offset=1)],
-            x1=1, y1=1, x2=1, y2=0
-        )
+    # Hier nutzen wir nun mark_bar für einzelne Stundenbalken mit abgerundeten Ecken
+    chart = alt.Chart(df_anzeige).mark_bar(
+        color='#1f77b4',
+        cornerRadiusTopLeft=4,
+        cornerRadiusTopRight=4
     ).encode(
         x=alt.X('Anzeigezeit:O', title='Zeitpunkt (Tag & Uhrzeit)', sort=None, axis=alt.Axis(labelAngle=-45)),
         y=alt.Y('Bruttopreis (cent/kWh):Q', title='Bruttopreis (ct/kWh)'),
