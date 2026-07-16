@@ -53,7 +53,8 @@ if raw_data:
     df['Startzeit'] = pd.to_datetime(df['start_timestamp'], unit='ms').dt.tz_localize('UTC').dt.tz_convert('Europe/Vienna')
     df['Stunde'] = df['Startzeit'].dt.strftime('%H:00')
     df['Datum'] = df['Startzeit'].dt.date
-    df['Anzeigezeit'] = df['Startzeit'].dt.strftime('%a %H:%00') # Formatierte Achse z.B. "Mo 22:00"
+    df['Anzeigezeit'] = df['Startzeit'].dt.strftime('%d.%m. %H:%M')
+    
     
     # Börsenpreis von Eur/MWh in Cent/kWh
     df['Börsenpreis (netto cent/kWh)'] = (df['marketprice'] / 10).round(2)
